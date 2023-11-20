@@ -1,5 +1,6 @@
 pandas
+openpyxl
 scikit-learn
 streamlit
 levenshtein
-openpyxl
+

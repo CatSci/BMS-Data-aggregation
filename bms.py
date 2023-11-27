@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-from utils import read_file, fill_data, remove_shipping, convert_duplicate_order_to_dataframe
+from utils import read_file, fill_data, remove_shipping, convert_duplicate_order_to_dataframe, calculate_cost
 
 # hide streamlit style
 hide_st_style = """
@@ -53,6 +53,7 @@ if st.button("Done") and uploaded_files is not None:
         
         duplicate_order_number = convert_duplicate_order_to_dataframe(duplicate_order_numbers= duplicate_po_number)
         final_df = bms_dataframe.drop(rows_to_remove)
+        # final_df['Cost in USD'] = final_df.apply(calculate_cost, axis=1)
         st.dataframe(final_df)
         st.dataframe(duplicate_order_number)
     

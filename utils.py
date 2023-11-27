@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import Levenshtein
+import streamlit as st
 
 def read_file(uploaded_files):
     """_summary_
@@ -103,7 +104,7 @@ def remove_shipping(bms_dataframe):
     """
     processed_rows = set()
     rows_to_remove = []
-    extra_charges = ["Shipping", "shipping", "Shipping/Handling Charges", "Carriage"]
+    extra_charges = ["Shipping", "shipping", "Shipping/Handling Charges", "Carriage", "Freight"]
     
     for index, row in bms_dataframe.iterrows():
         for charge in extra_charges:
@@ -111,12 +112,15 @@ def remove_shipping(bms_dataframe):
                 if index not in processed_rows:
                     price = row["Inv Value  Currency-Original"]
                     description = row["Material Description"]
-                    print(f" Index {index} Description {description} and Price {price}")
+                    st.write(f" Index {index} Description {description} and Price {price}")
                     value = bms_dataframe.at[index - 1, "Inv Value  Currency-Original"]
+                    st.write(value)
                     if value < 0:
+                        st.write("at -2 index")
                         bms_dataframe.at[index - 2, 'Other Costs'] = float(price)
                         bms_dataframe.at[index - 2, 'Specify Other Cost'] = description
                     else:
+                        st.write("at -1 index")
                         bms_dataframe.at[index - 1, 'Other Costs'] = float(price)
                         bms_dataframe.at[index - 1, 'Specify Other Cost'] = description
                     rows_to_remove.append(index)
@@ -124,3 +128,18 @@ def remove_shipping(bms_dataframe):
 
     
     return bms_dataframe, rows_to_remove
+
+# Function to calculate 'Cost in USD' based on the specified conditions
+def calculate_cost(row):
+    inv_value = row['Inv Value  Currency-Original']
+    other_costs = row['Other Costs']
+
+    # Check for NaN or missing values and handle them
+    if pd.isna(inv_value):
+        inv_value = 0
+    if pd.isna(other_costs):
+        other_costs = 0
+
+    # Calculate 'Cost in USD'
+    cost_in_usd = inv_value + other_costs
+    return cost_in_usd

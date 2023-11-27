@@ -112,15 +112,15 @@ def remove_shipping(bms_dataframe):
                 if index not in processed_rows:
                     price = row["Inv Value  Currency-Original"]
                     description = row["Material Description"]
-                    st.write(f" Index {index} Description {description} and Price {price}")
+                    # st.write(f" Index {index} Description {description} and Price {price}")
                     value = bms_dataframe.at[index - 1, "Inv Value  Currency-Original"]
-                    st.write(value)
+                    # st.write(value)
                     if value < 0:
-                        st.write("at -2 index")
+                        # st.write("at -2 index")
                         bms_dataframe.at[index - 2, 'Other Costs'] = float(price)
                         bms_dataframe.at[index - 2, 'Specify Other Cost'] = description
                     else:
-                        st.write("at -1 index")
+                        # st.write("at -1 index")
                         bms_dataframe.at[index - 1, 'Other Costs'] = float(price)
                         bms_dataframe.at[index - 1, 'Specify Other Cost'] = description
                     rows_to_remove.append(index)

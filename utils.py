@@ -43,7 +43,6 @@ def fill_data(bms_dataframe, order_dataframe):
     c = 0
     # Iterate through rows in bms_report_df
     for idx, row in bms_dataframe.iterrows():
-        st.write(bms_dataframe.columns)
         order_no = row['Order No.']
         order_desc = row["Material Description"]
         # Check if 'Order No.' is not NaN

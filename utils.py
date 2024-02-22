@@ -146,18 +146,8 @@ def calculate_cost(row):
 
 
 def change_date_format(dataframe):
-    # Assuming your DataFrame is named df and the column is date_column
+    # Convert 'date_column' to datetime and format it to 'DD/MM/YYYY'
     dataframe['Receiving Date'] = pd.to_datetime(dataframe['Receiving Date'], errors='coerce')
-    # Check if the date format is already in DD/MM/YYYY
-    is_already_formatted = dataframe['date_column'].dt.strftime('%d/%m/%Y').eq(dataframe['Receiving Date'].astype(str))
-
-    # Convert only the dates that are not already in the desired format
-    dataframe.loc[~is_already_formatted, 'Receiving Date'] = dataframe['date_column'].dt.strftime('%d/%m/%Y')
-
-    # If you want to replace NaN values with a specific string, you can do the following:
-    # df['date_column'] = df['date_column'].fillna('YourDefaultValue')
-
-    # If you want to keep the column as a string, convert it back to string
-    dataframe['Receiving Date'] = dataframe['Receiving Date'].astype(str)
+    dataframe['Receiving Date'] = dataframe['Receiving Date'].dt.strftime('%d/%m/%Y').fillna('')
 
     return dataframe
